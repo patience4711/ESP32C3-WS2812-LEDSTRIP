@@ -80,23 +80,35 @@ void MQTT_Receive_Callback(char *topic, byte *payload, unsigned int length)
       }
     }  //consoleOut("devNr " + String(dev)) ;
 
+    // check got nvalue (on.off) 
+    if (!doc["nvalue"].isNull())
+    {
+       if(doc["nvalue"] == 1) 
+       {
+        lampOnNow(3); 
+       } else { 
+        lampOffNow(3);
+        checkTimers();
+       }    
+    }
+    
+    // check if there is a Level 
     if (!doc["Level"].isNull()) 
     {
       nLevel = doc["Level"].as<uint8_t>();
-    } else {
-      consoleOut("no nvalue, abort");
-      return;
-    }
-    consoleOut("mqtt nLevel = " + String(nLevel));
-    // switch the lamp without reporting to mqtt
-    set_dim_level(nLevel);
-    if(nLevel != 0)  
-    { 
-        UpdateLog(3, "dim command"); 
-    } else  { 
-        UpdateLog(3, "switched off");
-        checkTimers(); // disarm a timer that is active
-    }
+      consoleOut("mqtt nLevel = " + String(nLevel));
+        set_dim_level(nLevel);
+        if(nLevel != 0)  
+        { 
+            UpdateLog(3, "dim command"); 
+        } else  { 
+            UpdateLog(3, "switched off");
+            checkTimers(); // disarm a timer that is active
+        }
+    
+    
+    } 
+    
 }
 
 bool mqttGeldig() {

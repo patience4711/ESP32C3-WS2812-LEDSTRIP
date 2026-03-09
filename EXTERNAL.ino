@@ -4,12 +4,12 @@ bool checkRemote(String url) {
     if(settings.securityLevel == 0) return false; // never remote
     if ( url.indexOf(WiFi.gatewayIP().toString().substring(0, settings.securityLevel)) == -1 ) return true; else return false;
 }
-
+// when remote true we deny the switching
 // we come here when an unknown request is done
 void handleNotFound() {
   
 bool intern = false;
-if(checkRemote(server.client().remoteIP().toString()) ) intern = true;
+if(!checkRemote(server.client().remoteIP().toString()) ) intern = true;
 
 // **************************************************************************
 //             R E S T R I C T E D   A R E A

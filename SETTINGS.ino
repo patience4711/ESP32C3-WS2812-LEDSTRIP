@@ -23,6 +23,7 @@ void handleSettings() {
   toSend.replace("%MQPRT%",    String(settings.Mqtt_Port));
   toSend.replace("%MQFMT%",    String(settings.Mqtt_Format));
   toSend.replace("%MQIDX%",    String(settings.Mqtt_switchIDX));
+  toSend.replace("%GMT%",      String(settings.gmtOffset));
   // --- Booleans (Checkboxes) ---
   toSend.replace("%DTS_CHK%",  settings.DTS ? "checked" : "");
   toSend.replace("%DIAG_CHK%", settings.diagNose ? "checked" : "");
