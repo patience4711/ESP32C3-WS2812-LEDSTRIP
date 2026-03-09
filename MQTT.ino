@@ -85,13 +85,16 @@ void MQTT_Receive_Callback(char *topic, byte *payload, unsigned int length)
     {
        if(doc["nvalue"] == 1) 
        {
-        lampOnNow(3); 
-       } else { 
+        lampOnNow(3);
+        return; 
+       } else
+       if(doc["nvalue"] == 0) {
         lampOffNow(3);
         checkTimers();
+        return;
        }    
     }
-    
+    // if we are here, nvalue was 2 so we set the level
     // check if there is a Level 
     if (!doc["Level"].isNull()) 
     {
