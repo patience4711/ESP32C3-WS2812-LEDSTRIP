@@ -11,8 +11,13 @@ The main features are:
 - 4 built-in timers that can switch to adjustable dim levels.
 
 ### downloads
-[ESP32C3-RM-DIMMER-V0_3](https://github.com/patience4711/ESP32C3-SMART-LIGHT/blob/main/RMakerdimmer_v3.ino.merged.bin)
+2026-03-11 There is a new binary available ( see change log)<br>
+[ESP32C3-RM-DIMMER-V0_3a](https://github.com/patience4711/ESP32C3-SMART-LIGHT/blob/main/RMakerdimmer_v3.ino.merged.bin)
 
 ### Resetting the device
 - Press and Hold the Boot button for more than 3 seconds and then release to reset Wi-Fi configuration.
 - Press and Hold the Boot button for more than 10 seconds and then release to reset to factory defaults.
+## CHANGE LOG
+v03a:
+- improved the mosquitto functionallity.
+- fixed some imperfections in the webinterface.
