@@ -96,13 +96,13 @@ void handleTimerSave()
           consoleOut("timers[tKeuze].on_mode = " + String(timers[tKeuze].on_mode));
           consoleOut("timers[tKeuze].of_mode = " + String(timers[tKeuze].on_mode)) ;
            
-          actionFlag = 50 + tKeuze; // save and recalculate the timmers
+          
            // now send the confirm 
           procesId = 2;
           confirm("/TIMERCONFIG"); // call the confirmpage
           saveTimers();
           timer_schakel_uit(tKeuze); 
-          mustCalc[tKeuze] = true; // makes it recalc
+          mustCalc[tKeuze] = true; // makes it recalc in the loop
           return;
 }
 
