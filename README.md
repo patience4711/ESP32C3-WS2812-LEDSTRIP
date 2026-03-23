@@ -1,4 +1,4 @@
-This is software for a very smart controller for a ws2812 ledstrip. It has 4 built-in timers that can switcht a defined color light. It listens to voice commands via esp-rainmaker and google home. It can also work stand-alone and with its own timekeeping and timers you can make complex automations. 
+This is software for a very smart controller for a ws2812 ledstrip. It has 4 built-in timers that can switch a defined color light. It listens to voice commands via esp-rainmaker and google home. It can also work stand-alone and with its own timekeeping and timers you can make complex automations. 
 For instance, you can wind the strip around a hollow plastic piece of pipe to create a bulb that you can mount in a lantern or armature.
 
 Please visit the [WIKI](https://github.com/patience4711/ESP32C3-SMART-LIGHT/wiki) for more information
@@ -17,9 +17,7 @@ The main features are:
 - Press and Hold the Boot button for more than 3 seconds and then release to reset Wi-Fi configuration.
 - Press and Hold the Boot button for more than 10 seconds and then release to reset to factory defaults.
 ## CHANGE LOG
-v0_5:
+v0_1:
 - solved problems as to rainmker connection
 - improved communication via mqtt and cloud
-v0_3a:
-- improved the mosquitto functionallity.
-- fixed some imperfections in the webinterface.
+
