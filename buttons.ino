@@ -20,12 +20,12 @@ void read_onboard_button() {
           RMakerWiFiReset(2);
         } else {
           // Toggle device state
-          dimmer_state = !dimmer_state;
-          Serial.printf("Toggle State to %s.\n", dimmer_state ? "true" : "false");
+          strip_onoff = !strip_onoff;
+          Serial.printf("Toggle State to %s.\n", strip_onoff ? "true" : "false");
           // if (my_device) {
           //   my_device->updateAndReportParam(ESP_RMAKER_DEF_POWER_NAME, dimmer_state);
           // }
-          (dimmer_state==true) ? set_dim_level(last_duty): set_dim_level(0);
+          //(strip_state==true) ? set_dim_level(last_duty): set_dim_level(0);
         }
       }
 
@@ -96,51 +96,52 @@ void check_button1()
   // has been clicked, so we switch
   delay(300);
   if(digitalRead(button1) == HIGH){ // released
-      dimmer_state = !dimmer_state; // toggle true and false
-      Serial.printf("Toggle State to %s.\n", dimmer_state ? "true" : "false");
+      strip_onoff = !strip_onoff; // toggle true and false
+      Serial.printf("Toggle State to %s.\n", strip_onoff ? "true" : "false");
       //set_power(dimmer_state); 
       delay(100); // prevent re-reading before ready fading
       //(dimmer_state == true) ? UpdateLog(6, "switched on") : UpdateLog(6, "switched off");
-      if(dimmer_state == true) 
+      if(strip_onoff == true) 
       { 
           UpdateLog(6, "switched on"); 
-          set_dim_level(last_duty);
+          //set_dim_level(last_duty);
       } else 
       { 
         UpdateLog(6, "switched off");
-        set_dim_level(0);
+        //set_dim_level(0);
       }
+      update_strip();
   } 
       else 
   {
       // the button is still low the dim fuction is called
       dim_up = !dim_up; // toggle the direction
       // when the duty is already max, we dim down by default and reverse
-      if(current_duty >= 100) dim_up = false;
-      if(current_duty <= 1) dim_up = true;
+      if(strip_level >= 100) dim_up = false;
+      if(strip_level <= 1) dim_up = true;
       Serial.printf("Toggle dim direction to %s.\n", dim_up ? "true" : "false");
       while(digitalRead(button1) == LOW) {
         // as long as the button is low we dim +/- with steps of 140
-        (dim_up==true) ? current_duty += 5 : current_duty -= 5;
+        (dim_up==true) ? strip_level += 5 : strip_level -= 5;
         
-        if(current_duty > 100) current_duty = 100;
-        if(current_duty < 1) current_duty = 1; // cannot become 0
-        Serial.println(String(current_duty));
-        set_pwm(current_duty);
-        delay(80);
+        if(strip_level > 100) strip_level = 100;
+        if(strip_level < 1) strip_level = 1; // cannot become 0
+        //Serial.println(String(current_level));
+        update_strip();
+        delay(100);
         }     
         // we end up with a new dim value so remember this
-        last_duty = current_duty;
+        //last_duty = current_duty;
         // now we should inform rainmaker about this change ( stae and level)
         if (my_device) {
-               my_device->updateAndReportParam(ESP_RMAKER_DEF_POWER_NAME, dimmer_state);
-               my_device->updateAndReportParam(ESP_RMAKER_DEF_BRIGHTNESS_NAME, (int)current_duty);
+               my_device->updateAndReportParam(ESP_RMAKER_DEF_POWER_NAME, strip_state);
+               my_device->updateAndReportParam(ESP_RMAKER_DEF_BRIGHTNESS_NAME, (int)strip_level);
         
         }
         UpdateLog(6, "dim command");
        //eventSend(0); // tell the webpage that something has changed
        // now if duty not null, the led is on, so we should set switchonMoment
-       checkduty_not_Null();
+       //checkduty_not_Null();
        }
    }
 }

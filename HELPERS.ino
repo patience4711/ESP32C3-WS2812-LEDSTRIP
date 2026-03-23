@@ -1,36 +1,18 @@
 void ledblink(int i, int wacht) {
   for(int x=0; x<i; x++) {
     digitalWrite(led_onb, LED_ON);
-    set_pwm(90);
+    pixelsAan(100);
     delay(wacht);
     digitalWrite(led_onb, LED_OFF);
-    set_pwm(0);
+    pixelsAan(0);
     delay(wacht);
    }
 }
+void pixelsAan(int haha) {
+    pixels->setPixelColor(2, pixels->Color(haha, haha, haha));
+    pixels->show();
+}
 
-// void set_pwm(int value) {
-//   //consoleOut("set_pwm value = " + String(value));
-//   ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, value);
-//   // Update duty to apply the new value
-//   ledc_update_duty(LEDC_MODE, LEDC_CHANNEL);
-// }
-
-// void fade_pwm(int value) {
-//   // LEDC_MODE, LEDC_CHANNEL, target duty, time = set in ms
-//   //consoleOut("fade_pwm value = " + String(value)); 
-//   ledc_set_fade_with_time(LEDC_MODE, LEDC_CHANNEL, value, 1000); 
-//   ledc_fade_start(LEDC_MODE, LEDC_CHANNEL, LEDC_FADE_NO_WAIT);
-// }
-
-void checkduty_not_Null() 
-  {
-   if(current_duty != 0) {
-        dimmer_state = true; 
-    }
- }
-
- // function to show debug info
 void consoleOut(String toLog) {
 // decide to log to serial or the console 
   if(settings.diagNose) 
@@ -71,4 +53,23 @@ bool loginBoth(String who) {
   }
   
   return true; // Toegang verleend
+}
+
+void calculateHueSat(uint8_t r, uint8_t g, uint8_t b) {
+    float fr = r / 255.0f, fg = g / 255.0f, fb = b / 255.0f;
+    float maxVal = max(fr, max(fg, fb)), minVal = min(fr, min(fg, fb));
+    float delta = maxVal - minVal;
+
+    // Bereken Hue (0-359)
+    float h = 0;
+    if (delta > 0) {
+        if (maxVal == fr) h = 60 * fmod(((fg - fb) / delta), 6);
+        else if (maxVal == fg) h = 60 * (((fb - fr) / delta) + 2);
+        else if (maxVal == fb) h = 60 * (((fr - fg) / delta) + 4);
+        if (h < 0) h += 360;
+    }
+    strip_hue = (int)h;
+
+    // Bereken Saturation (0-100)
+    strip_sat = (maxVal == 0) ? 0 : (delta / maxVal) * 100;
 }

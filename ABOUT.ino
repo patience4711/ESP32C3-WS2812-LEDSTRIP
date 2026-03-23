@@ -4,7 +4,7 @@ const char ABOUT [] PROGMEM = R"=====(
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset='utf-8'>
 <link rel="stylesheet" type="text/css" href="/STYLES">
-<title>ESP32C3-DIMMER</title>
+<title>ESP32C3-LEDSTRIP</title>
 <style>
 table, th, td {border: 1px solid blue; width:font-size:12px; background-color: #ffffcc; }
 th, td { padding-left: 4px; padding-right: 4px;}
@@ -17,7 +17,7 @@ tr {height:26px;}
 <br><br>
 </div>
 <center><br>
-<h2>ESP32C3-DIMMER SYSTEM DATA</h2>
+<h2>ESP32C3-LEDSTRIP SYSTEM DATA</h2>
 
 )=====";
 
@@ -31,7 +31,7 @@ strcpy_P(page, ABOUT);
   int dagen = urens/24;
  
   strcat(page, "<br><table><tr><TH colspan='2'> SYSTEM INFORMATION</th></tr>" );
-  strcat(page, "<tr><td>firmware version<td>ESP32C3-RM-DIMMER-v0_3</tr>");
+  strcat(page, "<tr><td>firmware version<td>ESP32C3-LEDSTRIP-v0_1a</tr>");
   String trvd;
   if ( timeRetrieved ) trvd = "<tr><td>time retrieved<td>yes</tr>"; else trvd = "<tr><td>time retrieved<td>no</tr>";  
   //if ( timeRetrieved ) strcat(page,"<tr><td>time retrieved<td>yes</tr>"); else strcat(page,"<tr><td>time retrieved<td>n</tr>");

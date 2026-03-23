@@ -1,9 +1,7 @@
 
 
 void printStruct( String bestand ) {
-//input String bestand = "/Inv_Prop" + String(x) + ".str";
-//input String bestand = "/timerProp" + String(x) + ".str";
-      //String bestand = bestand + String(i) + ".str"
+
       //leesStruct(bestand); is done at boottime
       int timerNr = bestand.substring(10,11).toInt();
       Serial.println("timers[" + String(timerNr) + "].Active = " + String(timers[timerNr].Active ));
@@ -14,6 +12,8 @@ void printStruct( String bestand ) {
       Serial.println("timers[" + String(timerNr) + "].on_mm = " + String(timers[timerNr].on_mm));
       Serial.println("timers[" + String(timerNr) + "].of_mm = " + String(timers[timerNr].of_mm));  
       Serial.println("timers[" + String(timerNr) + "].Level = " + String(timers[timerNr].Level));
+      Serial.println("timers[" + String(timerNr) + "].Hue = " + String(timers[timerNr].Hue));
+      Serial.println("timers[" + String(timerNr) + "].Sat = " + String(timers[timerNr].Sat));
       Serial.print("timers[" + String(timerNr) + "].dow = :");
       
       for (int i = 0; i < 7; i++) {Serial.print(timers[timerNr].dow[i] ? '1' : '0');  }
@@ -37,6 +37,7 @@ void loadSettings() {
   prefs.getBytes("config", &settings, sizeof(mySettings));
   prefs.end();
   Serial.println("settings loaded with prefs");
+  //if (settings.bootWait == 0) settings.bootWait = 6;
 }
 
 void saveTimers() {
@@ -45,7 +46,7 @@ void saveTimers() {
   // en bereken de totale grootte van de 4 timers
   prefs.putBytes("timers", timers, sizeof(timers)); 
   prefs.end();
-  Serial.println("4 timers opgeslagen!");
+  consoleOut("saved 4 timers!");
 }
 
 void loadTimers() {
