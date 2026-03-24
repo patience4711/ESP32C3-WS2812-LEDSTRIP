@@ -21,7 +21,8 @@ The main features are:
 v0_2:
 - added a hue flow scene
 - improved the logic of the webui buttons
+
 v0_1:
-- solved problems as to rainmker connection
+- solved problems as to rainmaker connection
 - improved communication via mqtt and cloud
 
