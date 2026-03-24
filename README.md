@@ -11,13 +11,16 @@ The main features are:
 
 ### downloads
 2026-03-11 There is a new binary available ( see change log)<br>
-[ESP32C3-WS2812-V0_1](https://github.com/patience4711/ESP32C3-WS2812-LEDSTRIP/blob/main/RMakerLedstrip_v0_1.ino.merged.bin)<br><br>
+[ESP32C3-WS2812-V0_1](https://github.com/patience4711/ESP32C3-WS2812-LEDSTRIP/blob/main/RMakerLedstrip_v0_2.ino.merged.bin)<br><br>
 ![mainpage](https://github.com/user-attachments/assets/6130b48e-c553-4d50-879f-d09c467e2eea)
 
 ### Resetting the device
 - Press and Hold the Boot button for more than 3 seconds and then release to reset Wi-Fi configuration.
 - Press and Hold the Boot button for more than 10 seconds and then release to reset to factory defaults.
 ## CHANGE LOG
+v0_2:
+- added a hue flow scene
+- improved the logic of the webui buttons
 v0_1:
 - solved problems as to rainmker connection
 - improved communication via mqtt and cloud
