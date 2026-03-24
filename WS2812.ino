@@ -60,13 +60,21 @@ void update_strip()
       pixels->fill(rgbcolor);
     } 
     else {
-      consoleOut("not implemented");
+      consoleOut("prog_1");
+      return;
     }
   }
-  
   pixels->show(); // Deze stuurt de 'clear' of de 'color' pas echt naar de strip
   send_mqttSwitch();
   send_mqttColor();
-
 }
 
+void prog_1()
+{
+      currentHue += 25;
+      //if(currentHue > 359) currentHue = 0;
+      uint32_t  rgbcolor = pixels->ColorHSV(currentHue, 255, strip_level);
+      pixels->fill(rgbcolor);
+      pixels->show();
+      
+}
