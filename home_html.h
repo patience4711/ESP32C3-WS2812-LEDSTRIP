@@ -68,12 +68,12 @@ const char home_html[] PROGMEM = R"rawliteral(
 <b id="pwdby">powered by Hansiart</b><br>
 <br><br>
 <table>
-  <tr><td><button id='bt0' onclick='buttonFunction(0)' class='bt'>ON/OFF</button></td>
+  <tr><td><button id='bt0' onclick='buttonFunction(0)' class='bt'>OFF</button></td>
   <td><button id='bt1' onclick='buttonFunction(1)' class='bt'>WARM</button></td>
   <td><button id='bt2' onclick='buttonFunction(2)' class='bt'>NEUTRAL</button></td>  
   <tr><td><button id='bt3' onclick='buttonFunction(3)' class='bt'>COOL</button></td>
   <td><button id='bt4' onclick='buttonFunction(4)' class='bt'>COLOR</button></td>
-  <td><button id='bt5' onclick='buttonFunction(5)' class='bt'>PRESET</button></td>
+  <td><button id='bt5' onclick='buttonFunction(5)' class='bt'>HUE FLOW</button></td>
   </table>
   <br><br>
   <div class='slidecontainer'>
@@ -149,10 +149,10 @@ function applyDataToUI(data) {
     //onst satSlider = document.getElementById('sat');
     if (pwrBtn) {
         if (data.onoff === 1) {
-            pwrBtn.style.backgroundColor = "#1f8a07"; 
+            pwrBtn.style.backgroundColor = "#b9b9c1"; 
             maindiv.style.backgroundColor = "white";
         } else {
-            pwrBtn.style.backgroundColor = "#b9b9c1";
+            pwrBtn.style.backgroundColor = "#1f8a07";
             maindiv.style.backgroundColor = "#d3d3db";
         }
     }

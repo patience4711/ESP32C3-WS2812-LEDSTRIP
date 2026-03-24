@@ -2,9 +2,7 @@
 void startServer() 
 {
 
-
-  Serial.println("");
-  Serial.print("Connected to wifi, IP = ");
+  Serial.print("\nConnected to wifi, IP = ");
   Serial.println(WiFi.localIP());
 
   if (MDNS.begin("esp32")) {
@@ -20,6 +18,14 @@ void startServer()
   server.on("/STYLES", HTTP_GET, []() {
   server.send_P(200, "text/css", STYLES);
   });
+  
+  server.on("/favicon.ico", []() {
+  const char* favicon_base64 = "AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAu29YA0Q8YALTd3gBm4eMA0+blAIHh4wCa2tsAdd/gALUUnQC24+IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARERERERERERJkZmRGZkZlEkhIhIhIhKUSSFmFmFmEpRJIVUVUVUSlEkhV3EXcRGUSSZQAAB1YpRJJlczMHVilEiGWIOAdWKESIZYgIh1aIRIhliHiIiIhEiIiIVYhYiUSIZohmaCgpRIgiiCIoiClEiJmImZmJmUREREREREREQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+  server.send(200, "image/x-icon", favicon_base64); 
+  // Let op: Sommige browsers accepteren Base64 direct als 'text/plain', 
+  // maar voor een .ico is een echte binaire buffer beter.
+});
+  
   
   server.on("/MENU", HTTP_GET, []() {
   // we cannot open the menu from outside our own network.  
@@ -43,15 +49,7 @@ void startServer()
 
   server.on("/saveSettings", handleSaveSettings);
   
-  //server.on("/test.svg", drawGraph);
-//   server.on("/inline", []() {
-//     server.send(200, "text/plain", "this works as well");
-//   });
   server.on("/LOGPAGE", handleLogPage);
-
- // server.on("/CLEAR-LOG", handleLogClear); 
-
-  //server.on("/TIMERCONFIG", zendpageTimers);
 
   server.on("/timer", handleTimer); 
   
@@ -62,46 +60,7 @@ void startServer()
     
   server.on("/submitTimers", handleTimerSave); 
  
-  // this handles the operation of the slider and the saving of defaultpwm
-  server.on("/submitPwm", HTTP_GET, []() {
-    int duty = server.arg("pwmVal").toInt();
-    consoleOut("slider intput " + String(duty));
-    if (server.hasArg("save"))
-    {
-       consoleOut("save default duty");
-       saveSettings();
-     } else {   
-       set_dim_level(duty);
-       UpdateLog(5, "dim command");
-      }
-      if(duty == 0) 
-      {
-        dimmer_state = false;
-      }
-      server.send(200, "text/plain", "ok");
-   });
-   
-  server.on("/toggle", HTTP_GET, []() {
-     dimmer_state = !dimmer_state; // Toggle de waarde
-     consoleOut("New dimmer_state: " + String(dimmer_state));
-     String json = "{\"state\":" + String(dimmer_state) + ",\"duty\":" + String(last_duty) + "}";
-     server.send(200, "application/json", json);
-     //set_power(dimmer_state); // true or false
-     if(dimmer_state) 
-     {
-      UpdateLog(5, "switched on");
-      set_dim_level(last_duty);
-     
-     } else { 
-      UpdateLog(5, "switched off");
-      set_dim_level(0);
-     } 
-     
-     // if there is a tinmer active and we switch off, the timer must be disarmed
-     if(!dimmer_state) checkTimers();
-     });
-    
-    server.on("/REBOOT", HTTP_GET, []() {
+  server.on("/REBOOT", HTTP_GET, []() {
      procesId = 4; // wait extra long
      confirm("/");
      //consoleOut("New dimmer_state: " + String(dimmer_state));
@@ -110,20 +69,79 @@ void startServer()
      }); 
    
    //Endpoint to request current status
-   server.on("/status", HTTP_GET, []() {
+   server.on("/get.Data", HTTP_GET, []() {
       // We build the JSON string
       String json = "{";
-      json += "\"state\":" + String(dimmer_state ? "1" : "0") + ",";
-      json += "\"duty\":" + String(last_duty);
+      json += "\"onoff\":" + String(strip_onoff ? "1" : "0");
+      json += ",\"state\":" + String(strip_state);
+      json += ",\"level\":" + String(strip_level);
+      json += ",\"hue\":" + String(strip_hue);
+      json += ",\"sat\":" + String(strip_sat);
       json += "}";
       server.send(200, "application/json", json); // Merk op: "application/json"
     });
    
-   server.on("/changed", []() {
-    // send simply back the dimmer state
-    (dimmer_state == true) ? server.send(200, "text/plain", "1") : server.send(200, "text/plain", "0");
+   server.on("/buttons", []() {
+     // which button is pressed
+     int btn = server.arg("button").toInt();
+     consoleOut("button pressed nr " + String(btn));
+     if(btn != 0) strip_onoff = true; //als een knop (anders dan 0) is gedrukt dan altijd aan    
+     switch(btn) {
+       case 0:
+          strip_onoff = false; // clicking this button means always off 
+          //update_strip();
+          break;
+       case 1:
+          //setWhiteTone(1);
+          strip_state = 1;
+          break;
+       case 2:
+          //setWhiteTone(2);
+          strip_state = 2;
+          break;
+       case 3:
+          //setWhiteTone(3);
+          strip_state = 3;
+          break;
+       case 4:
+          strip_state = 4;
+          //update_strip;
+          break;          
+        case 5:
+          strip_state = 5;
+          //update_strip;
+          break;
+      }
+      if(strip_onoff) UpdateLog(5, "switched on"); else UpdateLog(5, "switched off");
+      update_strip();
+      server.send(200, "text/plain", "buttons OK");
+ });
 
-});
+   server.on("/sliders", []() {
+     // which slider is moved
+     int sld = server.arg("slider").toInt();
+     int val = server.arg("val").toInt();
+     consoleOut("slider shifted to " + String(val));
+     switch(sld) {
+       case 1:
+          strip_hue = val;
+          strip_state = 4;
+          break;
+       case 2:
+          strip_sat = val;
+          strip_state = 4;
+          break;
+       case 3:
+          strip_level = val;
+          break;
+     }
+     // when a slider is handled, the light goes on
+     strip_onoff = true;
+     update_strip();
+     server.send(200, "text/plain", "sliders OK");
+ });
+
+
    server.on("/DENIED", HTTP_GET, []() {
    server.send_P(200, "text/html", "<center><h2>FORBIDDEN");
    });
@@ -134,37 +152,15 @@ void startServer()
 }
 
 
-void handleToggle() {
-  dimmer_state = !dimmer_state; // Toggle de waarde
-  Serial.print("New dimmer-state: " + String(dimmer_state));
-  //Serial.println(mijnWaarde ? "AAN" : "UIT");
+// void handleToggle() {
+//   strip_state = !strip_state; // Toggle de waarde
+//   Serial.print("New dimmer-state: " + String(strip_state));
+//   //Serial.println(mijnWaarde ? "AAN" : "UIT");
   
-  // Stuur een simpel antwoord terug naar de browser
-  server.send(200, "text/plain", dimmer_state ? "1" : "0");
-}
-
-// void handleHome()
-// {
-//   toSend = menu_html;
-//   server.send(200, "text/html", "HOMEPAGE");  
+//   // Stuur een simpel antwoord terug naar de browser
+//   server.send(200, "text/plain", strip_state ? "1" : "0");
 // }
 
-// void handleMenu()
-// {
-//   String toSend=FPSTR()
-// }
-// void handleNotFound()
-// {
-//   server.send(200, "text/html", "<center><h2>this request is invalid</h2></center>");  
-// }
-
-// void handlePwm()
-// {
-//   int duty = server.arg("pwmVal").toInt();
-//   consoleOut("slider intput " + String(duty));
-//   set_dim_level(duty);
-//   server.send(200, "text/plain", "OK");
-// }
 
 
 void confirm(String dest) {
@@ -172,13 +168,13 @@ void confirm(String dest) {
 String cont  = "<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width, initial-scale=1'><meta charset='utf-8'><script>";
 cont += "let waitTime=" + String(3000*procesId) + ";";
 cont += "function redirect(){";
-cont += " let counter=document.getElementById('counter');";
-cont += " let secs=waitTime/1000;";
-cont += " counter.textContent=secs;";
-cont += " let timer=setInterval(function(){";
-cont += "   secs--; counter.textContent=secs;";
-cont += "   if(secs<=0){ clearInterval(timer); window.parent.location.href='" + dest + "'; }";
-cont += " },1000);";
+cont += "let counter=document.getElementById('counter');";
+cont += "let secs=waitTime/1000;";
+cont += "counter.textContent=secs;";
+cont += "let timer=setInterval(function(){";
+cont += "secs--; counter.textContent=secs;";
+cont += "if(secs<=0){ clearInterval(timer); window.parent.location.href='" + dest + "'; }";
+cont += "},1000);";
 cont += "}";
 cont += "</script></head>";
 cont += "<body onload='redirect()' style='background-color: #edd8f0;'>";

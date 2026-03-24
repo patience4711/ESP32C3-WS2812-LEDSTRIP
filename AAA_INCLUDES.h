@@ -55,6 +55,7 @@ uint8_t strip_state = 1;
 int strip_hue = 50;
 int strip_sat = 50;
 int strip_level = DEFAULT_LEVEL;
+uint16_t currentHue = 0;
 
 
 // The framework provides some standard device types like switch, lightbulb, fan, temperature sensor.
@@ -153,8 +154,9 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
       uint8_t of_mm = 10;
       bool dow[7];
       int     Level = 50;
-      int     Hue = 200;
-      int     Sat = 50;
+      //int     Hue = 200;
+      //int     Sat = 50;
+      int Pro = 1;
   } myTimers;
   myTimers timers[4];  
 
@@ -177,7 +179,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
     char     gmtOffset[5] = "+120";  //+5.30 GMT
     bool     DTS = true;
     uint8_t  securityLevel = 6;
-    //uint8_t  bootWait = 6; 
+    uint8_t  speed = 5; 
     int      numpix = 3;
     char     dvName[21] = "ESP32-DIMMER";
     char     Mqtt_Broker[30] = "192.168.0.100";
@@ -208,7 +210,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
   unsigned long previousMillis = 0;        // will store last temp was read
   static unsigned long laatsteMeting = 0; //wordt ook bij OTA gebruikt en bij wifiportal
   static unsigned long lastCheck = 0; //wordt ook bij OTA gebruikt en bij wifiportal
-
+  unsigned long lastUpdate = 0;
   #define LED_AAN    LOW   //sinc
   #define LED_UIT    HIGH
   #define knop              0  //
