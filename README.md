@@ -6,8 +6,8 @@ Please visit the [WIKI](https://github.com/patience4711/ESP32C3-S/wiki) for more
 The main features are:
 - easy to connect to wifi via esp rainmaker app on your phone
 - controllable via webui, voice commands (google home), mosquitto, fysical button (optional)
-- 4 built-in timers that can switch to adjustable dim levels.
-- color control with sliders for hue and saturation
+- 4 built-in timers that can switch to adjustable dim levels and scenes.
+- color control with sliders for hue, saturation and brightness
 
 ### downloads
 2026-03-11 There is a new binary available ( see change log)<br>
