@@ -8,16 +8,16 @@ const char TIMERCONFIG_MAIN[] PROGMEM = R"=====(
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="/STYLES">
 <style>
-iframe { width: 100%; height: 500px; border: 1px solid #ccc; margin-top: 10px; }
+iframe { width: 100%; height: 570px; border: 1px solid #ccc; margin-top: 10px; }
 </style>
 </head>
 <body>
 <div class="container">
     <div class="nav">
-        <a onclick="loadTimer(0)">tmr 0</a>
-        <a onclick="loadTimer(1)">tmr 1</a>
-        <a onclick="loadTimer(2)">tmr 2</a>
-        <a onclick="loadTimer(3)">tmr 3</a>
+        <a onclick="loadTimer(0)">timer 0</a>
+        <a onclick="loadTimer(1)">timer 1</a>
+        <a onclick="loadTimer(2)">timer 2</a>
+        <a onclick="loadTimer(3)">timer 3</a>
         <span class='close'><a href="/MENU">X</a></span><br>   
 </div>
 
@@ -59,8 +59,9 @@ input[type='time'], select.sb1 {
 
 <center><table>
 <tr><td style='width:60px;'>active?<td style='width:100px'><input type='checkbox' name='ta' tActive>
-<tr><td>level<td><input class ='inp3' type='number' name='lev' value="{lev}" min="10" max="100"><td style='width:120px'></td></tr>
 
+<tr><td>scene<td><input class ='inp3' type='number' name='pro' value="{pro}" min="1" max="5"><td style='width:120px'></td></tr>
+<tr><td>level<td><input class ='inp3' type='number' name='lev' value="{lev}" min="10" max="100"><td style='width:120px'></td></tr>
 <tr>
 <tr><td>on :
 <td><input class='inp4' type='time' name='inw' value='{onX}' title='hh:mm'>
@@ -91,10 +92,8 @@ input[type='time'], select.sb1 {
 <th> fr <input type='checkbox' name='fr' selvr></th>
 <th> sa <input type='checkbox' name='sa' selza></th>
 </tr></thead></table>
-
-
-<button type="submit" class="btn">SAVE TIMER </button></td></tr>
-
+<br>
+<button type="submit" class="btn">SAVE TIMER </button>
 </center><br></html>
  )=====";
 

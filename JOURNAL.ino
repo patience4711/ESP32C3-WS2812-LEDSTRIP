@@ -19,13 +19,12 @@ void handleLogPage( )
     char what[14];
     for ( int i = 1; i <= Log_Count; i++ ) 
     {
-        consoleOut("one row of the list, nummer i = " + String(i)); //Serial.println(i);    
+        //consoleOut("one row of the list, nummer i = " + String(i)); //Serial.println(i);    
         j--; //  we get the index of the last record in the array
         //Serial.println("een regel van de lijst, nummer j = "); //Serial.println(j);
         if (j ==-1) j = Log_MaxEvents - 1; // if we are under the first index of the array ,we go to the last
         ////////////////// One table line ///////////////////
-        //consoleOut("crash here?");
-        //sprintf(temp,"<tr><td>%s</td><td>%s</td><td>%s</td>", Log_list[j].date, Log_list[j].kind, Log_list[j].message);
+
       
         switch(Log_list[j].kind)
         {
@@ -52,8 +51,6 @@ void handleLogPage( )
               strcpy(what, toPaste.c_str());
               break;
         }
-     //consoleOut("update log with " + String(what));
-     //consoleOut("lognr = " + String(logNr)); 
    
         // have only chars to sprintf, what is the converted kind
         snprintf(temp, sizeof(temp),"<tr><td>%s</td><td>%s</td><td>%s</td>",
@@ -66,6 +63,7 @@ void handleLogPage( )
         temp[0]='\0';
         ////////////////// One table line ///////////////////
     }
+    //content += "</body></html>";
     //consoleOut("content=" + content);
     toZend.replace("<cont>", content);
     server.send(200, "text/html", toZend); 

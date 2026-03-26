@@ -57,6 +57,17 @@ int strip_sat = 50;
 int strip_level = DEFAULT_LEVEL;
 uint16_t currentHue = 0;
 
+// flaggen voor de updates
+#define FLAG_RM_HUE  (1 << 0)  // 1
+#define FLAG_RM_SAT  (1 << 1)  // 2
+#define FLAG_RM_DIM  (1 << 2)  // 4
+#define FLAG_RM_POW  (1 << 3)  // 8
+#define FLAG_MQTT_COL (1 << 4) // 16
+#define FLAG_MQTT_SW  (1 << 5) // 32
+
+uint16_t updateRequests = 0; // Dit houdt alle actieve vlaggen bij
+unsigned long lastChangeTime = 0;
+const int debounceTime = 50; // Wacht 50ms na laatste wijziging
 
 // The framework provides some standard device types like switch, lightbulb, fan, temperature sensor.
 // But, you can also define custom devices using the 'Device' base class object, as shown here
@@ -181,6 +192,9 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
     uint8_t  securityLevel = 6;
     uint8_t  speed = 5; 
     int      numpix = 3;
+    int      phue = 300;
+    uint8_t  psat = 50;
+    uint8_t  scene = 0;
     char     dvName[21] = "ESP32-DIMMER";
     char     Mqtt_Broker[30] = "192.168.0.100";
     char     Mqtt_outTopic[26] = "domoticz/in"; // was 26

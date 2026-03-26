@@ -101,16 +101,17 @@ void check_button1()
       //set_power(dimmer_state); 
       delay(100); // prevent re-reading before ready fading
       //(dimmer_state == true) ? UpdateLog(6, "switched on") : UpdateLog(6, "switched off");
-      if(strip_onoff == true) 
+      if(strip_onoff == true, true) 
       { 
           UpdateLog(6, "switched on"); 
-          //set_dim_level(last_duty);
+          setStripOn();
       } else 
       { 
         UpdateLog(6, "switched off");
+        stripOff(1);
         //set_dim_level(0);
       }
-      update_strip();
+      //update_strip(true, true);
   } 
       else 
   {
@@ -127,11 +128,10 @@ void check_button1()
         if(strip_level > 100) strip_level = 100;
         if(strip_level < 1) strip_level = 1; // cannot become 0
         //Serial.println(String(current_level));
-        update_strip();
+        setDim(1);
         delay(100);
         }     
-        // we end up with a new dim value so remember this
-        //last_duty = current_duty;
+
         // now we should inform rainmaker about this change ( stae and level)
         if (my_device) {
                my_device->updateAndReportParam(ESP_RMAKER_DEF_POWER_NAME, strip_state);
@@ -139,9 +139,7 @@ void check_button1()
         
         }
         UpdateLog(6, "dim command");
-       //eventSend(0); // tell the webpage that something has changed
-       // now if duty not null, the led is on, so we should set switchonMoment
-       //checkduty_not_Null();
+
        }
    }
 }

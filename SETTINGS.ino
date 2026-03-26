@@ -19,7 +19,11 @@ void handleSettings() {
   toSend.replace("%LONGI%",    String(settings.longi, 3)); // 3 decimalen
   toSend.replace("%LATI%",     String(settings.lati, 3));
   toSend.replace("%SECLVL%",   String(settings.securityLevel));
-  toSend.replace("%DUTY%",     String(settings.default_duty));
+  toSend.replace("%DELAY%",    String(settings.speed));
+  toSend.replace("%PRESETH%",  String(settings.phue));
+  toSend.replace("%PRESETS%",  String(settings.psat));
+  toSend.replace("%PRESETP%",  String(settings.scene));
+  toSend.replace("%NUMPIX%",   String(settings.numpix));
   toSend.replace("%MQPRT%",    String(settings.Mqtt_Port));
   toSend.replace("%MQFMT%",    String(settings.Mqtt_Format));
   toSend.replace("%MQIDX%",    String(settings.Mqtt_switchIDX));
@@ -52,7 +56,11 @@ if (server.method() != HTTP_POST) { server.send(405, "text/plain", "Method Not A
   settings.longi = server.arg("longi").toFloat();
   settings.lati = server.arg("lati").toFloat();
   settings.securityLevel = (uint8_t)server.arg("secLvl").toInt();
-  settings.default_duty = server.arg("duty").toInt();
+  settings.speed = (uint8_t)server.arg("speed").toInt();
+  settings.phue = server.arg("phue").toInt();
+  settings.psat = server.arg("psat").toInt();
+  settings.scene = server.arg("psce").toInt();
+  settings.numpix = server.arg("numpix").toInt();
   settings.Mqtt_Port = server.arg("mqPrt").toInt();
   settings.Mqtt_Format = server.arg("mqFmt").toInt();
   settings.Mqtt_switchIDX = server.arg("mqIdx").toInt();

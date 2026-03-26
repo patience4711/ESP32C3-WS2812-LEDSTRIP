@@ -1,4 +1,24 @@
+
 void getTijd() 
+{
+// we try 3 times to retrieve the time
+    uint8_t cntr = 1;
+    while (!timeRetrieved) {
+    // we attempt 3 times
+      tijdGet();
+      if(timeRetrieved) 
+      {
+        
+        break;
+      }
+      delay(500);
+      cntr ++;
+      if(cntr > 3) break;
+    }
+    consoleOut("get time attempts:" + String(cntr)); 
+} 
+
+void tijdGet() 
 {
 
   timeRetrieved = false; // stays false until time is retrieved  

@@ -88,32 +88,37 @@ void startServer()
      if(btn != 0) strip_onoff = true; //als een knop (anders dan 0) is gedrukt dan altijd aan    
      switch(btn) {
        case 0:
-          strip_onoff = false; // clicking this button means always off 
-          //update_strip();
+          //strip_onoff = false; // clicking this button means always off 
+          stripOff(1);
+          UpdateLog(3, "switched off");
           break;
        case 1:
-          //setWhiteTone(1);
-          strip_state = 1;
+          setWhiteTone(1);
+          //strip_state = 1;
           break;
        case 2:
-          //setWhiteTone(2);
-          strip_state = 2;
+          setWhiteTone(2);
+          //strip_state = 2;
           break;
        case 3:
-          //setWhiteTone(3);
-          strip_state = 3;
+          setWhiteTone(3);
+          //strip_state = 3;
           break;
        case 4:
           strip_state = 4;
-          //update_strip;
+          //take the saved values for sat and hue
+          if(settings.phue != 0) strip_hue = settings.phue; 
+          if(settings.psat != 0) strip_sat = settings.psat;
+          setStripOn(); // on at once and inform rm and mqtt
           break;          
         case 5:
           strip_state = 5;
-          //update_strip;
+          consoleOut("prog_1");
+          setStripOn(); // on at once and inform rm and mqtt
           break;
       }
       if(strip_onoff) UpdateLog(5, "switched on"); else UpdateLog(5, "switched off");
-      update_strip();
+      //update_strip(true, true);
       server.send(200, "text/plain", "buttons OK");
  });
 
@@ -126,18 +131,22 @@ void startServer()
        case 1:
           strip_hue = val;
           strip_state = 4;
+          setHue(1);
+          raiseFlag(FLAG_RM_HUE);   // Zet Rainmaker Hue vlag aan
           break;
        case 2:
           strip_sat = val;
           strip_state = 4;
+          setSat(1);
+          raiseFlag( FLAG_RM_SAT );   // Zet Rainmaker Hue vlag aan
           break;
        case 3:
           strip_level = val;
-          break;
+          if(strip_level == 0) stripOff(1); else setDim(1);
      }
+
      // when a slider is handled, the light goes on
-     strip_onoff = true;
-     update_strip();
+     //update_strip(true, true);
      server.send(200, "text/plain", "sliders OK");
  });
 
@@ -150,17 +159,6 @@ void startServer()
    Serial.println("HTTP server started");
    server.begin();
 }
-
-
-// void handleToggle() {
-//   strip_state = !strip_state; // Toggle de waarde
-//   Serial.print("New dimmer-state: " + String(strip_state));
-//   //Serial.println(mijnWaarde ? "AAN" : "UIT");
-  
-//   // Stuur een simpel antwoord terug naar de browser
-//   server.send(200, "text/plain", strip_state ? "1" : "0");
-// }
-
 
 
 void confirm(String dest) {

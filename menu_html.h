@@ -1,7 +1,7 @@
 //<link rel="stylesheet" type="text/css" href="/STYLESHEET">
 const char menu_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html><html><head><meta charset='utf-8'>
-<title>ESP32-C3-DIMMER</title>
+<title>ESP32-C3-LEDSTRIP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="/STYLES">
 <style>
@@ -37,7 +37,7 @@ window.location.href='/';
 <br><br></div>
 <center>
 <br><br>
-<h2>ESP32 DIMMER MENU</h2><br><br>
+<h2>ESP32C3 LEDSTRIP MENU</h2><br><br>
 <div class="nav nav-large">
 
 <table><tr>

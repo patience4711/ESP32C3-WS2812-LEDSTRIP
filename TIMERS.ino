@@ -30,7 +30,8 @@ void handleTimer() {
     if(timers[tKeuze].Active) toSend.replace("tActive", "checked");
     // we put back "selected" for the option in the selectbox zonattaanwelke_1 2 3 4 or 5 
     toSend.replace("{lev}" , String(timers[tKeuze].Level)); // vervang level
-    
+    //toSend.replace("{hue}" , String(timers[tKeuze].Hue)); // vervang hue
+    toSend.replace("{pro}" , String(timers[tKeuze].Pro)); // vervang pro
     toSend.replace(zonatt_replace(String(timers[tKeuze].on_mode), "zonattaan"), "selected");
     toSend.replace(zonatt_replace(String(timers[tKeuze].of_mode), "zonattuit"), "selected");
     
@@ -64,11 +65,12 @@ void handleTimer() {
 void handleTimerSave()
 {
 // collect the formdata
-          dimmer_state = 0; // prevent slow down
+          //strip_state = 0; // prevent slow down
           timers[tKeuze].Active = server.hasArg("ta"); // true or false
           //if(server.hasArg("ta"))  timers[tKeuze].Active = true;  else timers[tKeuze].Active = false;
           timers[tKeuze].Level = server.arg("lev").toInt();
-         
+          //timers[tKeuze].Hue = server.arg("hue").toInt();
+          timers[tKeuze].Pro = server.arg("pro").toInt();
          if (server.hasArg("inw")) {
             String t = server.arg("inw");  // "18:30"
             timers[tKeuze].on_hh = t.substring(0, 2).toInt();
@@ -101,7 +103,9 @@ void handleTimerSave()
           procesId = 2;
           confirm("/TIMERCONFIG"); // call the confirmpage
           saveTimers();
-          timer_schakel_uit(tKeuze); 
+          mustSwitch[0] = hasSwitched[0] = false;
+          strip_onoff = false; // we put the strip off
+          stripOff(1);
           mustCalc[tKeuze] = true; // makes it recalc in the loop
           return;
 }
@@ -155,7 +159,7 @@ void timer_schakel_in(int welke) {
             if ( now() > (switchOnTime[welke]) && now() < switchOfTime[welke] && !hasSwitched[welke]) { 
                 lampOnNow(welke+20); // lamp on right away
                 hasSwitched[welke] = true;
-                //consoleOut("switched on by timer" + String(welke));
+                consoleOut("switched on by timer" + String(welke));
             }
 }
  
@@ -164,7 +168,7 @@ void timer_schakel_uit(int welke) {
               lampOffNow(welke+20); //lamp off right away, mqtt message, checkTimers
               mustSwitch[welke] = false;
               hasSwitched[welke] = false; // prevent repetitions
-              //consoleOut("switched off by timer"+ String(welke));
+              consoleOut("switched off by timer"+ String(welke));
              }
     }
 
@@ -181,17 +185,26 @@ void lampOnNow(int who) {
       if(who > 19) // if switched by a timer we should fade to timers[wie].Level
       {   
         uint8_t wie = who-20;
-        set_dim_level(timers[wie].Level);
-      // switched by someone else we use the last known duty
-      } else {
-        set_dim_level(last_duty);
+        strip_level = timers[wie].Level;
+        consoleOut("strip_level set to " + String(strip_level));
+        //strip_hue = timers[wie].Hue;
+        //consoleOut("strip_hue set to " + String(strip_hue));
+        //strip_sat = timers[wie].Sat;
+        //consoleOut("strip_sat set to " + String(strip_sat));
+        strip_state = timers[wie].Pro;
+        strip_onoff = true;
+        setStripOn();
       }
-      UpdateLog(who, "switched on");
-    }
+  }
+
+
+
+
 
 void lampOffNow(int who) 
     {
-        set_dim_level(0);
-        consoleOut("duty cycle set to 0");
+        strip_onoff = false;
+        consoleOut("switch off");
         UpdateLog(who, "switched off");
+        stripOff(1);
     }

@@ -21,17 +21,28 @@ if ( intern ) {    //DebugPrintln("the request comes from inside the network");
 
      if(serverUrl == "/SW=ON") {
       consoleOut("sw=on found");
-      //set_dim_level(last_duty);
-      UpdateLog(5, "switched on");
-      server.send ( 200, "text/plain", "switched on" );
+      if(strip_onoff == false) {
+         strip_onoff = true;
+         if(settings.scene != 0) setScene(); else setStripOn();
+         UpdateLog(5, "switched on");
+         server.send ( 200, "text/plain", "switched on" );
+      } else {
+         server.send ( 200, "text/plain", "already on, skip" );
+      }
       return; 
      }
      if(serverUrl == "/SW=OFF") {
       consoleOut("sw=off found");
-      //set_dim_level(0);
-      UpdateLog(5, "switched off");
-      server.send ( 200, "text/plain", "switched off" );
-      checkTimers;
+      if(strip_onoff == true) {
+         strip_onoff = false;
+         stripOff(1);
+         //update_strip(true, true);
+         //checkTimers();
+         UpdateLog(5, "switched off");
+         server.send ( 200, "text/plain", "switched off" );
+      } else {
+         server.send ( 200, "text/plain", "already off, skip" );
+      }
       return; 
      }
      // if we are here, no valid api was found    

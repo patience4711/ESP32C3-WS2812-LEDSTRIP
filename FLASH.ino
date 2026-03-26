@@ -12,8 +12,8 @@ void printStruct( String bestand ) {
       Serial.println("timers[" + String(timerNr) + "].on_mm = " + String(timers[timerNr].on_mm));
       Serial.println("timers[" + String(timerNr) + "].of_mm = " + String(timers[timerNr].of_mm));  
       Serial.println("timers[" + String(timerNr) + "].Level = " + String(timers[timerNr].Level));
-      Serial.println("timers[" + String(timerNr) + "].Hue = " + String(timers[timerNr].Hue));
-      Serial.println("timers[" + String(timerNr) + "].Sat = " + String(timers[timerNr].Sat));
+      //Serial.println("timers[" + String(timerNr) + "].Hue = " + String(timers[timerNr].Hue));
+      Serial.println("timers[" + String(timerNr) + "].Pro = " + String(timers[timerNr].Pro));
       Serial.print("timers[" + String(timerNr) + "].dow = :");
       
       for (int i = 0; i < 7; i++) {Serial.print(timers[timerNr].dow[i] ? '1' : '0');  }
@@ -23,6 +23,7 @@ void printStruct( String bestand ) {
 
 
 void saveSettings() {
+  
   prefs.begin("app-config", false);
   // We slaan de hele struct op onder de key "config"
   prefs.putBytes("config", &settings, sizeof(mySettings));

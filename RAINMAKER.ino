@@ -10,8 +10,8 @@ static void mqtt_event_handler(void *arg, esp_event_base_t event_base, int32_t e
             case RMAKER_MQTT_EVENT_DISCONNECTED:
                 Serial.println("\nMQTT Disconnected.");
                 break;
-            default:
-                Serial.println("\nUnhandled RainMaker Event:");
+            //default:
+            //    consoleOut("\nUnhandled RainMaker Event:");
         }
     }
 }
@@ -50,42 +50,48 @@ void write_callback(Device *device, Param *param,
 {
     const char *param_name = param->getParamName();
     const char *device_name = device->getDeviceName();
-    //Serial.printf("PARAM %s\n", param->getParamName());
 
     if (strcmp(param_name, "Brightness") == 0) {
         strip_level = val.val.i; // 0–100 
         Serial.printf("\nLevel cmd, value = %d for %s - %s\n", val.val.i, device_name, param_name); 
-        //if (dimmer_state) // ha mod { 
-        //int duty = map(level, 0, 100, 0, 255); // ha mod //
-        //update_leds(level); 
+        if(strip_level > 0) strip_onoff = true; else strip_onoff = false;
+        setDim(2);
+        param->updateAndReport(val);
         UpdateLog(4, "dim command");
     }
     else if (strcmp(param_name, "Power") == 0) {
         Serial.printf("Power cmd, value = %s for %s - %s\n", val.val.b ? "true" : "false", device_name, param_name);
         strip_onoff = val.val.b; //
         if(strip_onoff == false)
-         {
-          //set_dim_level(0);
+           {
+          stripOff(2); //set_dim_level(0);
           UpdateLog(4, "switched off");
-          // disarm a timer when active
-          checkTimers();
          } else {
-          //set_dim_level(last_duty);
-          UpdateLog(4, "switched on");
+              UpdateLog(4, "switched on");
+              if(settings.scene != 0) 
+              {
+                  strip_state = settings.scene;
+                  //say strip_state = 3 now. What happens
+                  setScene();
+              } else {        
+                  setStripColor();
+              }        
+              raiseFlag(FLAG_MQTT_COL | FLAG_MQTT_SW) ; // set MQTT flaggen
          }
-        //param->updateAndReport(val);
+        param->updateAndReport(val);
     
          } else if (strcmp(param_name, ESP_RMAKER_DEF_HUE_NAME) == 0) {
               strip_hue = val.val.i;
               strip_state = 4; //makes the strip go on
-              strip_onoff = true; // otherwise it just switches off
+              setHue(2);
+              param->updateAndReport(val);
+
          } else if (strcmp(param_name, ESP_RMAKER_DEF_SATURATION_NAME) == 0) {
               strip_sat = val.val.i;
               strip_state = 4; //makes the strip go on
-              strip_onoff = true; // otherwise it just switches off
+              setSat(2);
+              param->updateAndReport(val);
          }
-
-    update_strip(); 
 
 }
 

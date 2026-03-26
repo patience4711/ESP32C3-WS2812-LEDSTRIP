@@ -68,8 +68,11 @@ void calculateHueSat(uint8_t r, uint8_t g, uint8_t b) {
         else if (maxVal == fb) h = 60 * (((fr - fg) / delta) + 4);
         if (h < 0) h += 360;
     }
+    
     strip_hue = (int)h;
-
+    consoleOut("calculated hue = " + String(strip_hue));
     // Bereken Saturation (0-100)
+
     strip_sat = (maxVal == 0) ? 0 : (delta / maxVal) * 100;
+    consoleOut("calculated sat = " + String(strip_sat));
 }

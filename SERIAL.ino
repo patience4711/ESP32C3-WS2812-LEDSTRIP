@@ -67,7 +67,7 @@ void handle_Serial () {
           Serial.printf("Password      : %s | UserPwd: %s\n", settings.passwd, settings.userPwd);
           Serial.printf("Coords (Lat)  : %.3f | (Long): %.3f\n", settings.lati, settings.longi);
           Serial.printf("Time          : GMT %s | DST: %s\n", settings.gmtOffset, settings.DTS ? "Yes" : "No");
-          Serial.printf("Security      : %u | Default Duty: %d%%\n", settings.securityLevel, settings.default_duty);
+          Serial.printf("Security      : %u | numpix: %d%%\n", settings.securityLevel, settings.numpix);
           Serial.printf("MQTT Broker   : %s:%d (Format: %d)\n", settings.Mqtt_Broker, settings.Mqtt_Port, settings.Mqtt_Format);
           Serial.printf("MQTT In/Out   : %s / %s\n", settings.Mqtt_inTopic, settings.Mqtt_outTopic);
           Serial.printf("MQTT Auth     : User: %s | ClientID: %s\n", settings.Mqtt_Username, settings.Mqtt_Clientid);

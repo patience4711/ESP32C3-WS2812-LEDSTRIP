@@ -9,7 +9,7 @@ body {font-family:arial; font-size: 12px;}
 .nav { background: #eee; padding: 10px; align-items: center; height: 40px;}
 
 .nav a { margin-right: 10px; cursor: pointer; color: blue; 
-text-decoration: none; font-size:20px;}
+text-decoration: none; font-size:16px;}
 
 .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 
@@ -58,16 +58,17 @@ const char settings_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ESP32 Dimmer Config</title>
+  <title>ESP32C3 LEDSTRIP</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="/STYLES"> 
   
 </head>
 <body>
-<div class="container">
+<div class="container"><center>
 <div class="nav">
 <span class='close'><a href="/">X</a></span>   
 <br><br></div>
+<h2>ESP32C3-LEDSTRIP SETTINGS</h2>
 <form action="/saveSettings" method="POST">
       
 <table style="width:100%">
@@ -76,9 +77,14 @@ const char settings_html[] PROGMEM = R"rawliteral(
 <tr><td>admin passwd<td><input type="text" name="passwd" value="%PASSWD%" maxlength="10">
 <tr><td>user passwd<td><input type="text" name="userPwd" value="%USERPWD%" maxlength="10">
 <tr><td>security level<td><input type="number" name="secLvl" value="%SECLVL%" min="0" max="255">
-<tr><td>default dim level<td><input type="number" name="duty" value="%DUTY%" min="0" max="1023">
 <tr><td>diagnose<td><input type="checkbox" name="diag" %DIAG_CHK%>
 
+<tr><th colspan="2">Ledstrip WS2812
+<tr><td>number of pixels<td><input type="number" name="numpix" value="%NUMPIX%" min="0" max="1023">
+<tr><td>transition speed<td><input type="number" name="speed" value="%DELAY%" min="1" max="10">
+<tr><td>preset hue<td><input type="number" name="phue" value="%PRESETH%" min="0" max="359">
+<tr><td>preset sat<td><input type="number" name="psat" value="%PRESETS%" min="0" max="100">
+<tr><td>preset scene<td><input type="number" name="psce" value="%PRESETP%" min="0" max="5">
 <tr><th colspan="2">Location and Time</th>
 <tr><td>longitude<td><input type="number" name="longi" value="%LONGI%" step="0.001">
 <tr><td>latitude <td><input type="number" name="lati" value="%LATI%" step="0.001">
@@ -108,7 +114,7 @@ const char settings_html[] PROGMEM = R"rawliteral(
 
 const char HTML_LOGPAGE[] PROGMEM = R"=====(
 <!DOCTYPE html><html><head><meta charset='utf-8'>
-<title>ESP32-DIMMER</title>
+<title>ESP32C2-LEDSTRIP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="/STYLES">
 
@@ -147,7 +153,7 @@ const char HTML_LOGPAGE[] PROGMEM = R"=====(
 <div class='nav'>
 <span class='close'><a href="/">X</a></span>
 <br><br></div><br>
-<h2>ESP32-DIMMER LOG</h2><br>
+<h2>ESP32C3 LEDSTRIP LOG</h2><br>
 <table><tr><td style='width:240px;'>Last refresh : %!@@!% hr.<td>
 <button onClick='window.location.reload();' style='width: 100px' value='0'>Refresh</button></table><br>
 <table id='lijst'>
@@ -175,7 +181,7 @@ const char TIMERCONFIG_START[] PROGMEM = R"=====(
 </div>
 
 <div id='msect'>
-  <center><h2>ESP32 DIMMER TIMERS </h2></center><br>
+  <center><h2>ESP32 LEDSTRIP TIMERS </h2></center><br>
 </div>
 
 <div id='msect'>
