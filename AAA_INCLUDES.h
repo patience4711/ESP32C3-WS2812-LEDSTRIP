@@ -54,6 +54,8 @@ bool strip_onoff = false;
 uint8_t strip_state = 1;
 int strip_hue = 50;
 int strip_sat = 50;
+int memHue;
+int memSat;
 int strip_level = DEFAULT_LEVEL;
 uint16_t currentHue = 0;
 

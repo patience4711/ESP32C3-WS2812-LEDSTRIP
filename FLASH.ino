@@ -29,6 +29,7 @@ void saveSettings() {
   prefs.putBytes("config", &settings, sizeof(mySettings));
   prefs.end();
   Serial.println("settings saved with prefs!");
+  if (settings.scene != 0) strip_state = settings.scene;
   actionFlag = 20; //reconnect mosquitto and getTime
 }
 
@@ -38,7 +39,8 @@ void loadSettings() {
   prefs.getBytes("config", &settings, sizeof(mySettings));
   prefs.end();
   Serial.println("settings loaded with prefs");
-  //if (settings.bootWait == 0) settings.bootWait = 6;
+  if (settings.scene != 0) strip_state = settings.scene;
+  
 }
 
 void saveTimers() {

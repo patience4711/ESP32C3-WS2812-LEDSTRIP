@@ -175,9 +175,9 @@ function applyDataToUI(data) {
         } else
         {
             //console.log("device = off");
-            // Als het apparaat uit staat (onoff is false), volg je de oude logica of een 'uit'-stijl
+            // If the device is off the active butten has a darker nuance
             if (btn.id === `bt${data.state}`) {
-                btn.style.backgroundColor = "#5f5f6b";
+                btn.style.backgroundColor = "#7d7d7d";
             } else {
                 btn.style.backgroundColor = "#b9b9c1";
             }

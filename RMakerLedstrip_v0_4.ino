@@ -211,11 +211,16 @@ void loop() {
    
     if (updateRequests > 0 && (millis() - lastChangeTime > debounceTime)) {
     consoleOut("handle flags = 0b" + String(updateRequests, BIN));
+    //void rmUpdateHue() { my_device->updateAndReportParam("Hue", (int)strip_hue); }
+    //void rmUpdateSat() { my_device->updateAndReportParam("Saturation", (int)strip_sat); }
+    //void rmUpdateDim() { my_device->updateAndReportParam("Brightness", (int)strip_level); }
+    //void rmUpdatePow() { my_device->updateAndReportParam("Power", strip_onoff); }
+    
     // Check Rainmaker updates
-    if (updateRequests & FLAG_RM_HUE)  { rmUpdateHue(); }
-    if (updateRequests & FLAG_RM_SAT)  { rmUpdateSat(); }
-    if (updateRequests & FLAG_RM_DIM)  { rmUpdateDim(); }
-    if (updateRequests & FLAG_RM_POW)  { rmUpdatePow(); }
+    if (updateRequests & FLAG_RM_HUE)  { my_device->updateAndReportParam("Hue", (int)strip_hue); }
+    if (updateRequests & FLAG_RM_SAT)  { my_device->updateAndReportParam("Saturation", (int)strip_sat); }
+    if (updateRequests & FLAG_RM_DIM)  { my_device->updateAndReportParam("Brightness", (int)strip_level); }
+    if (updateRequests & FLAG_RM_POW)  { my_device->updateAndReportParam("Power", strip_onoff); }
 
     // Check MQTT updates
     if (updateRequests & FLAG_MQTT_COL) { send_mqttColor(); }

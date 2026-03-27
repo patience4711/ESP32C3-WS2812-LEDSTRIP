@@ -107,8 +107,8 @@ void startServer()
        case 4:
           strip_state = 4;
           //take the saved values for sat and hue
-          if(settings.phue != 0) strip_hue = settings.phue; 
-          if(settings.psat != 0) strip_sat = settings.psat;
+          if(settings.phue != 0) strip_hue = settings.phue; else strip_hue = memHue;
+          if(settings.psat != 0) strip_sat = settings.psat; else strip_sat = memSat;
           setStripOn(); // on at once and inform rm and mqtt
           break;          
         case 5:
@@ -129,13 +129,13 @@ void startServer()
      consoleOut("slider shifted to " + String(val));
      switch(sld) {
        case 1:
-          strip_hue = val;
+          strip_hue = memHue = val;
           strip_state = 4;
           setHue(1);
           raiseFlag(FLAG_RM_HUE);   // Zet Rainmaker Hue vlag aan
           break;
        case 2:
-          strip_sat = val;
+          strip_sat = memSat = val;
           strip_state = 4;
           setSat(1);
           raiseFlag( FLAG_RM_SAT );   // Zet Rainmaker Hue vlag aan
