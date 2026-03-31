@@ -47,6 +47,7 @@ void stripOff(uint8_t who)
 {
     //in any case the strip goes out
     strip_onoff = false;
+    if (settings.scene != 0) strip_state = settings.scene;
     consoleOut("strip switch off");
     pixels->clear(); // Maakt intern alle pixels zwart
     checkTimers(); // disarm an eventual switched timer
@@ -111,6 +112,7 @@ void setSat(uint8_t who)
  {
     case 1:
         // the slider in the webui
+        // if we are in color mode(4) we remmber the color
         // we should send updates to rm and mqtt
         raiseFlag(FLAG_RM_SAT | FLAG_MQTT_COL | FLAG_MQTT_SW);
         break;
@@ -163,10 +165,7 @@ void setStripColor()
       pixels->show();
 }
 
-void rmUpdateHue() { my_device->updateAndReportParam("Hue", (int)strip_hue); }
-void rmUpdateSat() { my_device->updateAndReportParam("Saturation", (int)strip_sat); }
-void rmUpdateDim() { my_device->updateAndReportParam("Brightness", (int)strip_level); }
-void rmUpdatePow() { my_device->updateAndReportParam("Power", strip_onoff); }
+
 
 void prog_1()
 {
@@ -188,7 +187,8 @@ void setScene()  //
    strip_state = settings.scene;
      switch(strip_state) {
        case 0:
-          return;
+          setStripColor();
+          break;
        case 1:
           setWhiteTone(1);
           break;
@@ -200,8 +200,8 @@ void setScene()  //
           break;
        case 4:
           //if the value is not 0 we take the saved values for sat and hue
-          if( settings.phue != 0 ) strip_hue = settings.phue; 
-          if( settings.psat != 0 ) strip_sat = settings.psat;
+          if( settings.phue != 0 ) strip_hue = settings.phue; else strip_hue = memHue;
+          if( settings.psat != 0 ) strip_sat = settings.psat; else strip_sat = memSat;
           setStripColor(); // on at once and inform rm and mqtt
           break;          
         case 5:

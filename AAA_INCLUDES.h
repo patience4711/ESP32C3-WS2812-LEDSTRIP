@@ -37,7 +37,7 @@ bool rm_associated = false;
 bool dim_up = true; // direction of dimming when the button is pushed
 
 // fedines of the pins
-static int gpio_strip = 5;
+static int gpio_strip = 2;
 static int button1 = 7;
 static int onboard_button = 9;
 
