@@ -266,7 +266,7 @@ bool isSummertime()
 
   // --- basic summer/winter determination ---
   //if (tNow >= start && tNow < end) return true;   // 1 = summer, 0 = winter
-  return (t >= start && t < end); // true if t is between start and end
+  return (tNow >= start && tNow < end); // true if t is between start and end
   return false;
 
 }
