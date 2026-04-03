@@ -18,9 +18,10 @@ The main features are:
 - Press and Hold the Boot button for more than 3 seconds and then release to reset Wi-Fi configuration.
 - Press and Hold the Boot button for more than 10 seconds and then release to reset to factory defaults.
 ## CHANGE LOG
-v0_4:
+v0_4a:
 - added presets for color and scene
 - redesigned the way rainmaker, mosquitto and server communicate
+- solved a bug as to summer/wintertime
 
 v0_2:
 - added a hue flow scene
