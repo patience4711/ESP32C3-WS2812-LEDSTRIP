@@ -11,7 +11,7 @@ The main features are:
 
 ### downloads
 2026-03-26 There is a new binary available ( see change log)<br>
-[ESP32C3-WS2812-V0_1](https://github.com/patience4711/ESP32C3-WS2812-LEDSTRIP/blob/main/RMakerLedstrip_v0_4.ino.merged.bin)<br><br>
+[ESP32C3-WS2812-V0_4a](https://github.com/patience4711/ESP32C3-WS2812-LEDSTRIP/blob/main/RMakerLedstrip_v0_4.ino.merged.bin)<br><br>
 ![mainpage](https://github.com/user-attachments/assets/6130b48e-c553-4d50-879f-d09c467e2eea)
 
 ### Resetting the device
